@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: testinsight-postgres
+    environment:
+      POSTGRES_DB: testinsight
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in your .env file}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
