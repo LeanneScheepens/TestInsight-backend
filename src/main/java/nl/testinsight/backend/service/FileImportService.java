@@ -13,12 +13,5 @@ public class FileImportService {
 
         return Files.readString(path);
     }
-    public String readPlaywrightReport()
-            throws IOException {
 
-        Path path = Path.of(
-                "reports/playwright-report.json");
-
-        return Files.readString(path);
-    }
 }
