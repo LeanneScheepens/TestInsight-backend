@@ -1,68 +1,66 @@
 package nl.testinsight.backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import tools.jackson.databind.JsonNode;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import nl.testinsight.backend.enums.TestStatus;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
+@Getter
+@Setter
 @Entity
+@Table(name = "test_result")
 public class TestResult {
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
+    private Integer id;
 
-    private String testName;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "test_case_id", nullable = false)
+    private TestCase testCase;
 
-    private String status;
+    @Column(name = "run_id", nullable = false)
+    private UUID runId;
 
-    private String framework;
+    @Column(name = "expected_result")
+    private String expectedResult;
 
-    private LocalDateTime executionDate;
+    @Column(name = "actual_result")
+    private String actualResult;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private TestStatus status;
+
+    @Column(name = "failed_step", columnDefinition = "TEXT")
+    private String failedStep;
+
+    @Column(name = "executed_at", nullable = false)
+    private LocalDateTime executedAt;
+
+    @Column(name = "error_message", columnDefinition = "TEXT")
+    private String errorMessage;
+
+    @Column(name = "original_report")
+    private String originalReport;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "source_payload")
+    private JsonNode sourcePayload;
+
 
     public TestResult() {
     }
 
-    public TestResult(String testName, String status, String framework, LocalDateTime executionDate) {
-        this.testName = testName;
-        this.status = status;
-        this.framework = framework;
-        this.executionDate = executionDate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTestName() {
-        return testName;
-    }
-
-    public void setTestName(String testName) {
-        this.testName = testName;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getFramework() {
-        return framework;
-    }
-
-    public void setFramework(String framework) {
-        this.framework = framework;
-    }
-
-    public LocalDateTime getExecutionDate() {
-        return executionDate;
-    }
-
-    public void setExecutionDate(LocalDateTime executionDate) {
-        this.executionDate = executionDate;
-    }
 }
