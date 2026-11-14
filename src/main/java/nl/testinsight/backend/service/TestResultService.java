@@ -37,7 +37,7 @@ public class TestResultService {
             TestCaseRepository testCaseRepository, RawDataRepository rawDataRepository
     ) {
         this.testResultRepository = testResultRepository;
-        this.applicationService =  applicationService;
+        this.applicationService = applicationService;
         this.testCaseMapper = testCaseMapper;
         this.testResultMapper = testResultMapper;
         this.testCaseRepository = testCaseRepository;
@@ -45,9 +45,8 @@ public class TestResultService {
     }
 
 
-
     @Transactional
-    public void saveTestResultData (JsonNode jsonReport, List<TestDataDto> testData, String applicationName){
+    public void saveTestResultData(JsonNode jsonReport, List<TestDataDto> testData, String applicationName) {
 
 
         UUID runId = UUID.randomUUID();

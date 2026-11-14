@@ -1,7 +1,7 @@
-
 package nl.testinsight.backend.dto.playwright;
 
 import tools.jackson.databind.JsonNode;
+
 import java.util.List;
 
 public record PlaywrightProjectDto(

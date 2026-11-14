@@ -1,4 +1,3 @@
-
 package nl.testinsight.backend.dto.playwright;
 
 import java.util.List;

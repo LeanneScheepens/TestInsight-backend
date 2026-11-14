@@ -1,4 +1,3 @@
-
 package nl.testinsight.backend.dto;
 
 import nl.testinsight.backend.enums.SourceType;

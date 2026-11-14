@@ -1,4 +1,3 @@
-
 package nl.testinsight.backend.processor;
 
 import nl.testinsight.backend.dto.TestDataDto;
@@ -12,25 +11,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class PlaywrightTestProcessor implements TestReportProcessor {
+public class PlaywrightTestProcessor implements TestReportProcessor<PlaywrightReportDto> {
 
     private final TestStatusMapper testStatusMapper;
 
     public PlaywrightTestProcessor(
             TestStatusMapper testStatusMapper
-) {
+    ) {
         this.testStatusMapper = testStatusMapper;
     }
 
+    @Override
     public SourceType supports() {
         return SourceType.PLAYWRIGHT;
     }
 
-    /**
-     * Converts a Playwright report into normalized test case data.
-     */
-    public List<TestDataDto> process(
-            PlaywrightReportDto report
+
+    @Override
+    public List<TestDataDto> process( //Converts a Playwright report into normalized test case data
+                                      PlaywrightReportDto report
     ) {
 
         List<TestDataDto> testCases = new ArrayList<>();
@@ -46,17 +45,17 @@ public class PlaywrightTestProcessor implements TestReportProcessor {
         return testCases;
     }
 
-    /**
-     * Processes the current suite and its nested suites.
-     */
+
+    // Processes the current suite
     private void processSuite(
             PlaywrightSuiteDto suite,
             List<TestDataDto> testCases
     ) {
 
-        // The current suite is the direct parent of its specs.
+
         String groupId = suite.title();
 
+        // The current suite is the direct parent of its specs.
         if (suite.specs() != null) {
 
             for (PlaywrightSpecDto spec : suite.specs()) {
@@ -73,9 +72,8 @@ public class PlaywrightTestProcessor implements TestReportProcessor {
         }
     }
 
-    /**
-     * Processes every execution attempt of a Playwright test.
-     */
+
+    // Processes every execution attempts of a Playwright test
     private void processSpec(
             String groupId,
             PlaywrightSpecDto spec,
@@ -129,9 +127,7 @@ public class PlaywrightTestProcessor implements TestReportProcessor {
         }
     }
 
-    /**
-     * Finds the first failed step at the top level.
-     */
+    // Finds the first failed step at the top level.
     private String findFailedStep(
             List<PlaywrightStepDto> steps
     ) {
@@ -150,9 +146,8 @@ public class PlaywrightTestProcessor implements TestReportProcessor {
         return null;
     }
 
-    /**
-     * Returns the first available error message.
-     */
+
+    // Returns the first available error message
     private String getErrorMessage(
             PlaywrightResultDto result
     ) {

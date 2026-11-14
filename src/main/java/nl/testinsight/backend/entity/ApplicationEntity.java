@@ -1,4 +1,5 @@
 package nl.testinsight.backend.entity;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
