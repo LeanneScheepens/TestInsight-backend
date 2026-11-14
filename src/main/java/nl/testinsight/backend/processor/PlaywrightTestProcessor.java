@@ -2,18 +2,10 @@
 package nl.testinsight.backend.processor;
 
 import nl.testinsight.backend.dto.TestDataDto;
-import nl.testinsight.backend.dto.playwright.PlaywrightReportDto;
-import nl.testinsight.backend.dto.playwright.PlaywrightSuiteDto;
-import nl.testinsight.backend.dto.playwright.PlaywrightSpecDto;
-import nl.testinsight.backend.dto.playwright.PlaywrightTestDto;
-import nl.testinsight.backend.dto.playwright.PlaywrightResultDto;
-import nl.testinsight.backend.dto.playwright.PlaywrightStepDto;
-import nl.testinsight.backend.dto.playwright.PlaywrightErrorDto;
-
+import nl.testinsight.backend.dto.playwright.*;
 import nl.testinsight.backend.enums.SourceType;
 import nl.testinsight.backend.enums.TestStatus;
 import nl.testinsight.backend.mapper.TestStatusMapper;
-
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

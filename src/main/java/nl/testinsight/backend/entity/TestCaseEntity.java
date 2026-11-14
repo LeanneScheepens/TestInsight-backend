@@ -2,8 +2,8 @@ package nl.testinsight.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Setter;
 import lombok.Getter;
+import lombok.Setter;
 import nl.testinsight.backend.enums.SourceType;
 
 @Setter

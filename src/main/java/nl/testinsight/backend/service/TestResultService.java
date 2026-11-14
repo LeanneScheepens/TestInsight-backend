@@ -14,7 +14,10 @@ import nl.testinsight.backend.repository.TestResultRepository;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.JsonNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TestResultService {

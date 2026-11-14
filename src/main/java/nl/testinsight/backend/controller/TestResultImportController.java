@@ -1,15 +1,15 @@
 package nl.testinsight.backend.controller;
 
-import nl.testinsight.backend.dto.playwright.PlaywrightReportDto;
-import nl.testinsight.backend.service.TestResultImportPlaywrightService;
-import tools.jackson.databind.JsonNode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import nl.testinsight.backend.dto.ImportResponse;
+import nl.testinsight.backend.dto.playwright.PlaywrightReportDto;
 import nl.testinsight.backend.enums.SourceType;
+import nl.testinsight.backend.service.TestResultImportPlaywrightService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import nl.testinsight.backend.dto.ImportResponse;
+import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
 @RestController // Spring boot uses this to recognize the class, it is a component that handles HTTP requests and responses.

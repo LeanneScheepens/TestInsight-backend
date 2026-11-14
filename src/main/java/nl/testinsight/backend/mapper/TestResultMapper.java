@@ -5,13 +5,10 @@ import nl.testinsight.backend.entity.TestCaseEntity;
 import nl.testinsight.backend.entity.TestResultEntity;
 import org.springframework.stereotype.Component;
 
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Component

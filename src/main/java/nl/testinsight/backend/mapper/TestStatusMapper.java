@@ -1,6 +1,5 @@
 package nl.testinsight.backend.mapper;
 
-import nl.testinsight.backend.enums.SourceType;
 import nl.testinsight.backend.enums.TestStatus;
 import org.springframework.stereotype.Component;
 

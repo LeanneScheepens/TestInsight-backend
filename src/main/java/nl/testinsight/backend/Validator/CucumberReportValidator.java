@@ -1,7 +1,7 @@
 package nl.testinsight.backend.Validator;
-import nl.testinsight.backend.enums.SourceType;
-import tools.jackson.databind.JsonNode;
+
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.JsonNode;
 
 
 @Component
