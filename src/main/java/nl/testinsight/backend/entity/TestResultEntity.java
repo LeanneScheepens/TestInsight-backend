@@ -1,14 +1,10 @@
 package nl.testinsight.backend.entity;
 
-import tools.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import nl.testinsight.backend.enums.TestStatus;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -17,7 +13,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "test_result")
-public class TestResult {
+public class TestResultEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
@@ -25,16 +21,19 @@ public class TestResult {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "test_case_id", nullable = false)
-    private TestCase testCase;
+    private TestCaseEntity testCaseEntity;
 
     @Column(name = "run_id", nullable = false)
     private UUID runId;
 
-    @Column(name = "expected_result")
-    private String expectedResult;
+    @Column(name = "retry_index", nullable = false)
+    private int retryIndex = 0;
 
-    @Column(name = "actual_result")
-    private String actualResult;
+//    @Column(name = "expected_result")
+//    private String expectedResult;
+//
+//    @Column(name = "actual_result")
+//    private String actualResult;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -49,18 +48,19 @@ public class TestResult {
     @Column(name = "error_message", columnDefinition = "TEXT")
     private String errorMessage;
 
-    @Column(name = "original_report")
-    private String originalReport;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+//    @Column(name = "created_at", nullable = false)  // Maybe for in the future when Jira is implemented
+//    private LocalDateTime createdAt;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "source_payload")
-    private JsonNode sourcePayload;
+//    @Column(name = "original_report") // The JSON report of just one test
+//    private String originalReport;
+
+//    @JdbcTypeCode(SqlTypes.JSON)
+//    @Column(name = "source_payload")
+//    private JsonNode sourcePayload;
 
 
-    public TestResult() {
+    public TestResultEntity() {
     }
 
 }

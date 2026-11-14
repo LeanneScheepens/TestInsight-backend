@@ -1,6 +1,6 @@
 package nl.testinsight.backend.service;
 
-import nl.testinsight.backend.entity.Application;
+import nl.testinsight.backend.entity.ApplicationEntity;
 import nl.testinsight.backend.repository.ApplicationRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class ApplicationService {
     }
 
 
-    public Application findOrCreateApplication(String applicationName) {
+    public ApplicationEntity findOrCreateApplication(String applicationName) {
 
         if (applicationName == null || applicationName.isBlank()) {
             throw new IllegalArgumentException(
@@ -27,10 +27,10 @@ public class ApplicationService {
                 .findByName(applicationName)
                 .orElseGet(() -> {
 
-                    Application application =
-                            new Application(applicationName);
+                    ApplicationEntity applicationEntity =
+                            new ApplicationEntity(applicationName);
 
-                    return applicationRepository.save(application);
+                    return applicationRepository.save(applicationEntity);
                 });
     }
 }

@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "application")
-public class Application {
+public class ApplicationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,10 +18,10 @@ public class Application {
     @Column(nullable = false, unique = true)
     private String name;
 
-    public Application() {
+    public ApplicationEntity() {
     }
 
-    public Application(String name) {
+    public ApplicationEntity(String name) {
         this.name = name;
     }
 }

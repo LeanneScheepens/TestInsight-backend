@@ -1,18 +1,18 @@
 package nl.testinsight.backend.service;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Value;
-import java.nio.file.Path;
 
 @Service
 public class CucumberAttachmentService {
