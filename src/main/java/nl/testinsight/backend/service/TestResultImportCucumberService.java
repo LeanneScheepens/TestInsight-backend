@@ -1,5 +1,6 @@
 package nl.testinsight.backend.service;
 
+import nl.testinsight.backend.dto.Cucumber.CucumberFeatureDto;
 import nl.testinsight.backend.dto.Cucumber.CucumberReportDto;
 import nl.testinsight.backend.dto.ImportResponse;
 import nl.testinsight.backend.dto.TestDataDto;
@@ -7,11 +8,13 @@ import nl.testinsight.backend.enums.SourceType;
 import nl.testinsight.backend.processor.CucumberTestProcessor;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class TestResultImportCucumberService {
+public class TestResultImportCucumberService implements TestResultImportService {
 
     private final CucumberTestProcessor cucumberTestProcessor;
     private final TestResultService testResultService;
@@ -24,13 +27,21 @@ public class TestResultImportCucumberService {
         this.testResultService = testResultService;
     }
 
-    public ImportResponse importCucumberResults(
+    @Override
+    public boolean supports(SourceType sourceType) {
+        return SourceType.CUCUMBER == sourceType;
+    }
+
+    @Override
+    public ImportResponse importResults(
             String applicationName,
-            CucumberReportDto report,
-            SourceType sourceType,
-            JsonNode jsonReport
-    ) {
-        List<TestDataDto> testData = cucumberTestProcessor.process(report);
+            JsonNode jsonReport) {
+        final ObjectMapper objectMapper = new ObjectMapper();
+
+        CucumberFeatureDto[] cucumberFeatureDtos = objectMapper.treeToValue(jsonReport, CucumberFeatureDto[].class);
+        CucumberReportDto cucumberReportDto = new CucumberReportDto(Arrays.asList(cucumberFeatureDtos));
+
+        List<TestDataDto> testData = cucumberTestProcessor.process(cucumberReportDto);
 
         testResultService.saveTestResultData(jsonReport, testData, applicationName);
 

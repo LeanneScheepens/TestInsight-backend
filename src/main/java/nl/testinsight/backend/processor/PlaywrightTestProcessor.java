@@ -22,12 +22,6 @@ public class PlaywrightTestProcessor implements TestReportProcessor<PlaywrightRe
     }
 
     @Override
-    public SourceType supports() {
-        return SourceType.PLAYWRIGHT;
-    }
-
-
-    @Override
     public List<TestDataDto> process( //Converts a Playwright report into normalized test case data
                                       PlaywrightReportDto report
     ) {

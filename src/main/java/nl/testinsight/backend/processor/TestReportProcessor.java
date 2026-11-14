@@ -8,7 +8,10 @@ import java.util.List;
 
 @Component
 public interface TestReportProcessor<T> {
-    SourceType supports();
-
+    /**
+     * Processes the test result report into the generic {@link TestDataDto}
+     * @param report test result report
+     * @return the collection of {@link TestDataDto}
+     */
     List<TestDataDto> process(T report);
 }

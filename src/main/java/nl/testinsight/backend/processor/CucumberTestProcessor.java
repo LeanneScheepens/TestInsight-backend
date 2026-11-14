@@ -18,21 +18,12 @@ import java.util.List;
 public class CucumberTestProcessor implements TestReportProcessor<CucumberReportDto> {
     private final TestStatusMapper testStatusMapper;
 
-    public CucumberTestProcessor(
-            TestStatusMapper testStatusMapper
-    ) {
+    public CucumberTestProcessor(TestStatusMapper testStatusMapper) {
         this.testStatusMapper = testStatusMapper;
     }
 
     @Override
-    public SourceType supports() {
-        return SourceType.CUCUMBER;
-    }
-
-    @Override
-    public List<TestDataDto> process(
-            CucumberReportDto report
-    ) {
+    public List<TestDataDto> process(CucumberReportDto report) {
 
         List<TestDataDto> testCases = new ArrayList<>();
 
@@ -50,10 +41,7 @@ public class CucumberTestProcessor implements TestReportProcessor<CucumberReport
     }
 
     // Processes the current feature
-    private void processFeature(
-            CucumberFeatureDto feature,
-            List<TestDataDto> testCases
-    ) {
+    private void processFeature(CucumberFeatureDto feature, List<TestDataDto> testCases) {
 
         String groupId = feature.id();
 
@@ -68,26 +56,19 @@ public class CucumberTestProcessor implements TestReportProcessor<CucumberReport
     }
 
     // Processes every scenario of a Cucumber feature
-    private void processElement(
-            String groupId,
-            CucumberElementDto element,
-            List<TestDataDto> testCases
-    ) {
+    private void processElement(String groupId, CucumberElementDto element, List<TestDataDto> testCases) {
 
         if (element.steps() == null) {
             return;
         }
 
         // Calculate the overall scenario status
-        TestStatus status =
-                calculateStatus(element.steps());
+        TestStatus status = calculateStatus(element.steps());
 
         // Extract execution details
-        String failedStep =
-                findFailedStep(element.steps());
+        String failedStep = findFailedStep(element.steps());
 
-        String errorMessage =
-                getErrorMessage(element.steps());
+        String errorMessage = getErrorMessage(element.steps());
 
         // Cucumber does not contain retry information
         int retryIndex = 0;
@@ -96,25 +77,12 @@ public class CucumberTestProcessor implements TestReportProcessor<CucumberReport
         String executedAt = Instant.now().toString();
 
         // Convert to the shared DTO
-        TestDataDto testCaseData =
-                new TestDataDto(
-                        groupId,
-                        element.id(),
-                        element.name(),
-                        status,
-                        retryIndex,
-                        failedStep,
-                        errorMessage,
-                        SourceType.CUCUMBER,
-                        executedAt
-                );
+        TestDataDto testCaseData = new TestDataDto(groupId, element.id(), element.name(), status, retryIndex, failedStep, errorMessage, SourceType.CUCUMBER, executedAt);
 
         testCases.add(testCaseData);
     }
 
-    private TestStatus calculateStatus(
-            List<CucumberStepDto> steps
-    ) {
+    private TestStatus calculateStatus(List<CucumberStepDto> steps) {
 
         TestStatus highestStatus = null;
 
@@ -124,26 +92,19 @@ public class CucumberTestProcessor implements TestReportProcessor<CucumberReport
                 continue;
             }
 
-            TestStatus stepStatus = testStatusMapper.mapStatus(
-                    step.result().status()
-            );
+            TestStatus stepStatus = testStatusMapper.mapStatus(step.result().status());
 
-            if (highestStatus == null
-                    || stepStatus.getPriority() > highestStatus.getPriority()) {
+            if (highestStatus == null || stepStatus.getPriority() > highestStatus.getPriority()) {
 
                 highestStatus = stepStatus;
             }
         }
 
-        return highestStatus != null
-                ? highestStatus
-                : TestStatus.UNKNOWN;
+        return highestStatus != null ? highestStatus : TestStatus.UNKNOWN;
     }
 
     // Finds the first failed step
-    private String findFailedStep(
-            List<CucumberStepDto> steps
-    ) {
+    private String findFailedStep(List<CucumberStepDto> steps) {
 
         if (steps == null) {
             return null;
@@ -155,14 +116,10 @@ public class CucumberTestProcessor implements TestReportProcessor<CucumberReport
                 continue;
             }
 
-            TestStatus status = testStatusMapper.mapStatus(
-                    step.result().status()
-            );
+            TestStatus status = testStatusMapper.mapStatus(step.result().status());
 
             if (status == TestStatus.FAILED) {
-                return step.name() != null
-                        ? step.name()
-                        : step.keyword();
+                return step.name() != null ? step.name() : step.keyword();
             }
         }
 
@@ -170,9 +127,7 @@ public class CucumberTestProcessor implements TestReportProcessor<CucumberReport
     }
 
     // Returns the first available error message
-    private String getErrorMessage(
-            List<CucumberStepDto> steps
-    ) {
+    private String getErrorMessage(List<CucumberStepDto> steps) {
 
         if (steps == null) {
             return null;
@@ -180,9 +135,7 @@ public class CucumberTestProcessor implements TestReportProcessor<CucumberReport
 
         for (CucumberStepDto step : steps) {
 
-            if (step != null
-                    && step.result() != null
-                    && step.result().errorMessage() != null) {
+            if (step != null && step.result() != null && step.result().errorMessage() != null) {
 
                 return step.result().errorMessage();
             }
