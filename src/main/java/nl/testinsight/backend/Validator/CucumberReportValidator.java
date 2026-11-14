@@ -1,4 +1,5 @@
 package nl.testinsight.backend.Validator;
+import nl.testinsight.backend.enums.SourceType;
 import tools.jackson.databind.JsonNode;
 import org.springframework.stereotype.Component;
 
@@ -9,19 +10,19 @@ public class CucumberReportValidator {
         // Validate the Cucumber JSON structure
         if (report == null || report.isNull()) {
             throw new IllegalArgumentException(
-                    "Cucumber report cannot be null"
+                    "report cannot be null"
             );
         }
 
         if (!report.isArray()) {
             throw new IllegalArgumentException(
-                    "Cucumber report must be a JSON array"
+                    "report must be a JSON array"
             );
         }
 
         if (report.isEmpty()) {
             throw new IllegalArgumentException(
-                    "Cucumber report cannot be empty"
+                    "report cannot be empty"
             );
         }
 
@@ -34,7 +35,7 @@ public class CucumberReportValidator {
             }
 
             if (!feature.hasNonNull("name") // Jackson method
-                    || feature.path("name").asString().isBlank()) {
+                    || feature.path("name").asText().isBlank()) {
                 throw new IllegalArgumentException(
                         "Feature name is required"
                 );
@@ -57,7 +58,7 @@ public class CucumberReportValidator {
                 }
 
                 if (!scenario.hasNonNull("name")
-                        || scenario.path("name").asString().isBlank()) {
+                        || scenario.path("name").asText().isBlank()) {
                     throw new IllegalArgumentException(
                             "Scenario name is required"
                     );
@@ -65,7 +66,7 @@ public class CucumberReportValidator {
 
                 JsonNode steps = scenario.path("steps");
 
-                if (!steps.isMissingNode() && !steps.isArray()) {
+                if (!steps.isMissingNode() && !steps.isArray()) { // Look if it can be generic
                     throw new IllegalArgumentException(
                             "Scenario steps must be an array"
                     );
@@ -73,4 +74,14 @@ public class CucumberReportValidator {
             }
         }
     }
+
+//    @Override
+//    public SourceType supports() {
+//        return SourceType.CUCUMBER;
+//    }
+
+//    @Override
+//    public void validate(JsonNode report) {
+//
+//    }
 }

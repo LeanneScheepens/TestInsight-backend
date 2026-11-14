@@ -10,18 +10,18 @@ import nl.testinsight.backend.enums.SourceType;
 @Getter
 @Entity
 @Table(
-        name = "test_case",
-        uniqueConstraints = @UniqueConstraint(
-                name = "uk_test_case_identity",
-                columnNames = {
-                        "application_id",
-                        "source_type",
-                        "feature_id",
-                        "scenario_id"
-                }
-        )
+        name = "test_case"//,
+//        uniqueConstraints = @UniqueConstraint(
+//                name = "uk_test_case_identity",
+//                columnNames = {
+//                        "application_id",
+//                        "source_type",
+//                        "feature_id",
+//                        "scenario_id"
+//                }
+//        )
 )
-public class TestCase {
+public class TestCaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,11 @@ public class TestCase {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "application_id", nullable = false)
-    private Application application;
+    private ApplicationEntity applicationEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "raw_data_id", nullable = false)
+    private TestRawDataEntity testRawDataEntity;
 
     @Column(nullable = false)
     private String name;
@@ -49,6 +53,6 @@ public class TestCase {
     private String scenarioId;
 
 
-    public TestCase() {
+    public TestCaseEntity() {
     }
 }

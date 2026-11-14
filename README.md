@@ -94,4 +94,5 @@ To exit the PostgreSQL prompt, execute:
 
 ```sql
 \q
+
 ```

@@ -1,54 +1,42 @@
 package nl.testinsight.backend.mapper;
 
-import java.time.LocalDateTime;
-
-import nl.testinsight.backend.dto.CucumberResultDto;
-import nl.testinsight.backend.dto.PlaywrightResultDto;
-import nl.testinsight.backend.entity.TestResult;
-import nl.testinsight.backend.dto.CucumberScenarioData;
-import nl.testinsight.backend.entity.TestCase;
-import nl.testinsight.backend.enums.TestStatus;
+import nl.testinsight.backend.dto.TestDataDto;
+import nl.testinsight.backend.entity.TestCaseEntity;
+import nl.testinsight.backend.entity.TestResultEntity;
 import org.springframework.stereotype.Component;
 
+
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Locale;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Component
 public class TestResultMapper {
+    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_INSTANT;
 
-    public TestResult fromCucumber(
-            CucumberScenarioData scenario,
-            TestCase testCase,
-            UUID runId,
-            LocalDateTime receivedAt) {
-
-        // Create a new TestResult entity.
-        TestResult result = new TestResult();
-
-        result.setTestCase(testCase);
-        result.setRunId(runId);
-        result.setStatus(scenario.status());
-        result.setFailedStep(scenario.failedStep());
-        result.setErrorMessage(scenario.errorMessage());
-        result.setExecutedAt(receivedAt);
-        result.setCreatedAt(LocalDateTime.now());
+    public TestResultEntity mapTestResult(TestDataDto testData, TestCaseEntity testCaseEntity, UUID runId) {
+        TestResultEntity entity = new TestResultEntity();
 
 
-        return result;
+        LocalDateTime executedAt = LocalDateTime.ofInstant(
+                Instant.from(FORMATTER.parse(testData.executedAt())),
+                ZoneOffset.UTC);
+
+        entity.setTestCaseEntity(testCaseEntity);
+        entity.setExecutedAt(executedAt); // "startTime": "2026-11-13T09:02:00.000Z" is the time .parse doesn't work with this
+        entity.setRetryIndex(testData.retryIndex() == null
+                ? 0
+                : testData.retryIndex());
+        entity.setStatus(testData.status());
+        entity.setFailedStep(testData.failedStep());
+        entity.setErrorMessage(testData.errorMessage());
+        entity.setRunId(runId);
+
+        return entity;
     }
 
-    public TestStatus mapPlaywrightStatus(String status) {
-
-        if (status == null || status.isBlank()) {
-            return TestStatus.UNKNOWN;
-        }
-
-        return switch (status.toUpperCase(Locale.ROOT)) {
-            case "PASS", "PASSED", "EXPECTED" -> TestStatus.PASSED;
-            case "FAIL", "FAILED", "UNEXPECTED" -> TestStatus.FAILED;
-            case "SKIP", "SKIPPED" -> TestStatus.SKIPPED;
-            default -> TestStatus.UNKNOWN;
-        };
-    }
 }
