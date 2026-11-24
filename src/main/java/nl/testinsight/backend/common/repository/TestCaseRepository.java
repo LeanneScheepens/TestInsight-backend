@@ -1,7 +1,7 @@
 package nl.testinsight.backend.common.repository;
 
 import nl.testinsight.backend.common.entity.TestCaseEntity;
-import nl.testinsight.backend.common.enums.SourceType;
+import nl.testinsight.backend.common.SourceType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

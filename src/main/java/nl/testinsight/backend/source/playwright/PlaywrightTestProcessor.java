@@ -1,10 +1,10 @@
 package nl.testinsight.backend.source.playwright;
 
 import nl.testinsight.backend.common.dto.TestDataDto;
-import nl.testinsight.backend.common.enums.SourceType;
-import nl.testinsight.backend.common.enums.TestStatus;
+import nl.testinsight.backend.common.SourceType;
+import nl.testinsight.backend.common.TestStatus;
 import nl.testinsight.backend.common.mapper.TestStatusMapper;
-import nl.testinsight.backend.common.TestReportProcessor;
+import nl.testinsight.backend.common.model.TestReportProcessor;
 import nl.testinsight.backend.source.playwright.dto.*;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package nl.testinsight.backend.common.mapper;
 
-import nl.testinsight.backend.common.enums.TestStatus;
+import nl.testinsight.backend.common.TestStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;

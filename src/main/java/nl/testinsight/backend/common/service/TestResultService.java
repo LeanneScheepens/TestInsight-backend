@@ -2,21 +2,18 @@ package nl.testinsight.backend.common.service;
 
 import jakarta.transaction.Transactional;
 import nl.testinsight.backend.common.dto.TestDataDto;
+import nl.testinsight.backend.common.dto.TestStatusCountDto;
 import nl.testinsight.backend.common.entity.ApplicationEntity;
 import nl.testinsight.backend.common.entity.TestCaseEntity;
 import nl.testinsight.backend.common.entity.TestRawDataEntity;
 import nl.testinsight.backend.common.entity.TestResultEntity;
-import nl.testinsight.backend.common.mapper.TestCaseMapper;
 import nl.testinsight.backend.common.mapper.TestResultMapper;
-import nl.testinsight.backend.common.repository.RawDataRepository;
-import nl.testinsight.backend.common.repository.TestCaseRepository;
 import nl.testinsight.backend.common.repository.TestResultRepository;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.JsonNode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,10 +21,9 @@ public class TestResultService {
 
     public final TestResultRepository testResultRepository;
     public final ApplicationService applicationService;
-    public final TestCaseMapper testCaseMapper;
     public final TestResultMapper testResultMapper;
-    public final TestCaseRepository testCaseRepository;
-    public final RawDataRepository rawDataRepository;
+    public final RawDataService rawDataService;
+    public final TestCaseService testCaseService;
 
     public TestResultService(
             TestResultRepository testResultRepository,
@@ -38,40 +34,43 @@ public class TestResultService {
     ) {
         this.testResultRepository = testResultRepository;
         this.applicationService = applicationService;
-        this.testCaseMapper = testCaseMapper;
         this.testResultMapper = testResultMapper;
-        this.testCaseRepository = testCaseRepository;
-        this.rawDataRepository = rawDataRepository;
+        this.rawDataService = rawDataService;
+        this.testCaseService = testCaseService;
     }
 
 
     @Transactional
-    public void saveTestResultData(JsonNode jsonReport, List<TestDataDto> testData, String applicationName) {
+    public UUID saveTestResultData(JsonNode jsonReport, List<TestDataDto> testData, String applicationName) {
 
 
         UUID runId = UUID.randomUUID();
 
         ApplicationEntity applicationEntity = applicationService.findOrCreateApplication(applicationName);
-        TestRawDataEntity testRawDataEntity = new TestRawDataEntity();
-        testRawDataEntity.setSourcePayload(jsonReport);
-        rawDataRepository.save(testRawDataEntity);
+
+        TestRawDataEntity rawData =
+                rawDataService.saveRawData(jsonReport);
 
         List<TestResultEntity> resultEntities = new ArrayList<>();
-        TestCaseEntity testCaseEntity;
+
         for (TestDataDto data : testData) {
-            // Opzoeken in test_case tabel en meegeven ipv de null. Of een nieuwe entity als je hem niet vindt.
-            Optional<TestCaseEntity> storedTestCaseEntity = testCaseRepository.findByApplicationEntity_IdAndSourceTypeAndFeatureIdAndScenarioId(applicationEntity.getId(), data.sourceType(), data.groupId(), data.scenarioId());
-            testCaseEntity = storedTestCaseEntity.orElseGet(() -> testCaseMapper.mapTestCase(data, applicationEntity, testRawDataEntity));
-            testCaseRepository.save(testCaseEntity);
 
-            TestResultEntity testResultEntity = testResultMapper.mapTestResult(data, testCaseEntity, runId);
+            TestCaseEntity testCase =
+                    testCaseService.findOrCreateTestCase(
+                            data, applicationEntity, rawData
+                    );
 
-            resultEntities.add(testResultEntity);
+            TestResultEntity result =
+                    testResultMapper.mapTestResult(
+                            data, testCase, runId
+                    );
+
+            resultEntities.add(result);
         }
-
-//        testCaseRepository.saveAll(testCaseResults.values()); nog maken
         testResultRepository.saveAll(resultEntities);
 
+        return runId;
+    }
 
     }
 }

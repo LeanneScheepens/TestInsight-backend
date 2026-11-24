@@ -66,7 +66,7 @@ public class CucumberReportValidator {
 
                 JsonNode steps = scenario.path("steps");
 
-                if (!steps.isMissingNode() && !steps.isArray()) { // Look if it can be generic
+                if (!steps.isArray()) {
                     throw new IllegalArgumentException(
                             "Scenario steps must be an array"
                     );
@@ -75,13 +75,4 @@ public class CucumberReportValidator {
         }
     }
 
-//    @Override
-//    public SourceType supports() {
-//        return SourceType.CUCUMBER;
-//    }
-
-//    @Override
-//    public void validate(JsonNode report) {
-//
-//    }
 }

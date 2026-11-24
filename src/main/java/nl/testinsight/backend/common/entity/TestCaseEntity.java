@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import nl.testinsight.backend.common.enums.SourceType;
+import nl.testinsight.backend.common.SourceType;
 
 @Setter
 @Getter

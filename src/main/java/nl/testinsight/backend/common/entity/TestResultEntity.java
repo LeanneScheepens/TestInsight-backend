@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import nl.testinsight.backend.common.enums.TestStatus;
+import nl.testinsight.backend.common.TestStatus;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

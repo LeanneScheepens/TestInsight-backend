@@ -1,4 +1,4 @@
-package nl.testinsight.backend.common.enums;
+package nl.testinsight.backend.common;
 
 public enum SourceType {
     CUCUMBER,

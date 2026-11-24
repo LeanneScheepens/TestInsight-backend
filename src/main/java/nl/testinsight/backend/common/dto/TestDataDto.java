@@ -1,7 +1,7 @@
 package nl.testinsight.backend.common.dto;
 
-import nl.testinsight.backend.common.enums.SourceType;
-import nl.testinsight.backend.common.enums.TestStatus;
+import nl.testinsight.backend.common.SourceType;
+import nl.testinsight.backend.common.TestStatus;
 
 public record TestDataDto(
         String groupId,

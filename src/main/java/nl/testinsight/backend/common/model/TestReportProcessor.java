@@ -1,4 +1,4 @@
-package nl.testinsight.backend.common;
+package nl.testinsight.backend.common.model;
 
 import nl.testinsight.backend.common.dto.TestDataDto;
 import org.springframework.stereotype.Component;
