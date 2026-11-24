@@ -96,3 +96,12 @@ To exit the PostgreSQL prompt, execute:
 \q
 
 ```
+
+# Tips & Tricks
+
+## Password not found for database (DB_PASSWORD)
+Check if the .env file exists with the following content:
+
+```DB_PASSWORD=<your database password>```
+
+And inside the "Run configuration" you should add the "Environment variables" and select the .env file inside the root-folder.
