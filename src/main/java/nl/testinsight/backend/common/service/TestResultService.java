@@ -28,9 +28,9 @@ public class TestResultService {
     public TestResultService(
             TestResultRepository testResultRepository,
             ApplicationService applicationService,
-            TestCaseMapper testCaseMapper,
             TestResultMapper testResultMapper,
-            TestCaseRepository testCaseRepository, RawDataRepository rawDataRepository
+            RawDataService rawDataService,
+            TestCaseService testCaseService
     ) {
         this.testResultRepository = testResultRepository;
         this.applicationService = applicationService;
@@ -72,5 +72,7 @@ public class TestResultService {
         return runId;
     }
 
+    public List<TestStatusCountDto> getLatestTestResultsWithStatus() {
+        return testResultRepository.findLatestTestResultsWithStatus();
     }
 }
