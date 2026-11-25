@@ -3,6 +3,7 @@ package nl.testinsight.backend.common.service;
 import jakarta.transaction.Transactional;
 import nl.testinsight.backend.common.dto.TestDataDto;
 import nl.testinsight.backend.common.dto.TestStatusCountDto;
+import nl.testinsight.backend.common.dto.TestStatusTrendDto;
 import nl.testinsight.backend.common.entity.ApplicationEntity;
 import nl.testinsight.backend.common.entity.TestCaseEntity;
 import nl.testinsight.backend.common.entity.TestRawDataEntity;
@@ -73,6 +74,10 @@ public class TestResultService {
     }
 
     public List<TestStatusCountDto> getLatestTestResultsWithStatus() {
-        return testResultRepository.findLatestTestResultsWithStatus();
+        return testResultRepository.countLatestTestResultsWithStatus();
+    }
+
+    public List<TestStatusTrendDto> getStatusTrendResultsWithExecutionDate(){
+        return testResultRepository.findTestStatusTrend();
     }
 }

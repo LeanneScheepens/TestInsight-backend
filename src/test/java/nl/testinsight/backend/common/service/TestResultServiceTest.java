@@ -16,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessResourceFailureException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
+import nl.testinsight.backend.common.dto.TestStatusTrendDto;
+import java.time.LocalDate;
 
 import java.util.List;
 import java.util.UUID;
@@ -253,19 +255,19 @@ class TestResultServiceTest {
                 new TestStatusCountDto("FAILED", 5),
                 new TestStatusCountDto("SKIPPED", 1)
         );
-        when(testResultRepository.findLatestTestResultsWithStatus()).thenReturn(expectedResults);
+        when(testResultRepository.countLatestTestResultsWithStatus()).thenReturn(expectedResults);
 
         // Act
         List<TestStatusCountDto> acttualResults = testResultService.getLatestTestResultsWithStatus();
 
         // Assert
         assertEquals(expectedResults, acttualResults);
-        verify(testResultRepository, times(1)).findLatestTestResultsWithStatus();
+        verify(testResultRepository, times(1)).countLatestTestResultsWithStatus();
     }
     @Test
     void shouldReturnEmptyListWhenNoTestResultsExist() {
         // Arrange
-        when(testResultRepository.findLatestTestResultsWithStatus()).thenReturn(List.of());
+        when(testResultRepository.countLatestTestResultsWithStatus()).thenReturn(List.of());
 
         // Act
         List<TestStatusCountDto> actualResults = testResultService.getLatestTestResultsWithStatus();
@@ -273,12 +275,12 @@ class TestResultServiceTest {
         // Assert
         assertTrue(actualResults.isEmpty());
 
-        verify(testResultRepository, times(1)).findLatestTestResultsWithStatus();
+        verify(testResultRepository, times(1)).countLatestTestResultsWithStatus();
     }
     @Test
     void shouldPropagateExceptionWhenRepositoryFails() {
         // Arrange
-        when(testResultRepository.findLatestTestResultsWithStatus())
+        when(testResultRepository.countLatestTestResultsWithStatus())
                 .thenThrow(new DataAccessResourceFailureException(
                         "Database connection failed"
                 ));
@@ -290,7 +292,75 @@ class TestResultServiceTest {
         );
 
         verify(testResultRepository, times(1))
-                .findLatestTestResultsWithStatus();
+                .countLatestTestResultsWithStatus();
     }
 
+    @Test
+    void shouldReturnStatusTrendResultsWithExecutionDate() {
+        // Arrange
+        List<TestStatusTrendDto> expectedResults = List.of(
+                new TestStatusTrendDto(
+                        "PASSED", 15, LocalDate.of(2026, 11, 13)
+                ),
+                new TestStatusTrendDto(
+                        "FAILED", 5, LocalDate.of(2026, 11, 13)
+                ),
+                new TestStatusTrendDto(
+                        "PASSED", 18, LocalDate.of(2026, 11, 14)
+                ),
+                new TestStatusTrendDto(
+                        "FAILED", 2, LocalDate.of(2026, 11, 14)
+                ),
+                new TestStatusTrendDto(
+                        "SKIPPED", 1, LocalDate.of(2026, 11, 14)
+                )
+        );
+
+        when(testResultRepository.findTestStatusTrend())
+                .thenReturn(expectedResults);
+
+        // Act
+        List<TestStatusTrendDto> actualResults =
+                testResultService.getStatusTrendResultsWithExecutionDate();
+
+        // Assert
+        assertEquals(expectedResults, actualResults);
+
+        verify(testResultRepository, times(1))
+                .findTestStatusTrend();
+    }
+    @Test
+    void shouldReturnEmptyListWhenNoStatusTrendResultsExist() {
+        // Arrange
+        when(testResultRepository.findTestStatusTrend())
+                .thenReturn(List.of());
+
+        // Act
+        List<TestStatusTrendDto> actualResults =
+                testResultService.getStatusTrendResultsWithExecutionDate();
+
+        // Assert
+        assertTrue(actualResults.isEmpty());
+
+        verify(testResultRepository, times(1))
+                .findTestStatusTrend();
+    }
+    @Test
+    void shouldPropagateExceptionWhenStatusTrendRepositoryFails() {
+        // Arrange
+        when(testResultRepository.findTestStatusTrend())
+                .thenThrow(new DataAccessResourceFailureException(
+                        "Database connection failed"
+                ));
+
+        // Act & Assert
+        assertThrows(
+                DataAccessResourceFailureException.class,
+                () -> testResultService
+                        .getStatusTrendResultsWithExecutionDate()
+        );
+
+        verify(testResultRepository, times(1))
+                .findTestStatusTrend();
+    }
 }
