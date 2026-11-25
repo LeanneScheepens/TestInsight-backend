@@ -1,6 +1,7 @@
 package nl.testinsight.backend.common.controller;
 
 import nl.testinsight.backend.common.dto.TestStatusCountDto;
+import nl.testinsight.backend.common.dto.TestStatusTrendDto;
 import nl.testinsight.backend.common.entity.TestResultEntity;
 import nl.testinsight.backend.common.service.TestResultService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,5 +23,9 @@ public class TestResultController {
     @GetMapping("/latest")
     public List<TestStatusCountDto> getLatestTestResults(){
         return testResultService.getLatestTestResultsWithStatus();
+    }
+    @GetMapping("/statusTrend")
+    public List<TestStatusTrendDto> getStatusTrendResults(){
+        return testResultService.getStatusTrendResultsWithExecutionDate();
     }
 }
